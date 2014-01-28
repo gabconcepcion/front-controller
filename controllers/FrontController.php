@@ -2,7 +2,7 @@
 
 class FrontController
 {
-	const DEFAULT_CONTROLLER = 'IndexController';
+	const DEFAULT_CONTROLLER = 'Index';
 	const DEFAULT_ACTION = 'index';
 
 	protected $controller = self::DEFAULT_CONTROLLER;
@@ -16,8 +16,10 @@ class FrontController
 		{
 			if(isset($options['controller']))
 				$this->setController($options['controller']);
+
 			if(isset($options['action']))
 				$this->setAction($options['action']);
+
 			if(isset($options['params']))
 				$this->setParams($options['params']);
 		}else{
@@ -31,15 +33,23 @@ class FrontController
 		if(strpos($path, $this->basePath)===0)
 		{
 			$path = substr($path, strlen($this->basePath));
+			@list($controller,$action,$params) = explode('/', $path, 3);
 		}
-		@list($controller,$action,$params) = explode('/', $path, 3);
 		
 		if(isset($controller))
 			$this->setController($controller);
+		else
+			$this->setController($this->controller);
+
 		if(isset($action))
 			$this->setAction($action);
+		else
+			$this->setAction($this->action);
+
 		if(isset($params))
 			$this->setParams(explode('/', $params));
+		else
+			$this->setParams($this->params);
 	}
 	function setController($controller)
 	{
